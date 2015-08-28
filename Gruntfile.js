@@ -1,16 +1,6 @@
-// Generated on 2015-08-09 using generator-angular 0.12.1
 'use strict';
 
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
-
 module.exports = function (grunt) {
-
-	grunt.loadNpmTasks('grunt-contrib-connect');
-	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	// Define the configuration for all the tasks
 	grunt.initConfig({
@@ -50,14 +40,35 @@ module.exports = function (grunt) {
 					base: 'web-client'
 				}
 			}
+		},
+
+		execute: {
+			service: {
+				src: ['src/main.js']
+			}
+		},
+
+		jsdoc: {
+			dist: {
+				src: ['src/**/*.js', 'web-client/scripts/**/*.js'],
+				options: {
+					destination: 'doc'//,
+					//template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
+					//configure : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json"
+				}
+			}
 		}
 	});
 
+	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-execute');
+	grunt.loadNpmTasks('grunt-jsdoc');
 
-	grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
-		grunt.task.run([
-			'connect:livereload',
-			'watch'
-		]);
-	});
+	// Run web-client
+	grunt.registerTask('serve', 'Compile then start a connect web server', ['connect:livereload', 'watch']);
+	// Run aware service
+	grunt.registerTask('service', 'Starts the aware service', ['execute:service']);
+	// Generate Doc
+	grunt.registerTask('generate-doc', 'Generate documentation', ['jsdoc']);
 };
