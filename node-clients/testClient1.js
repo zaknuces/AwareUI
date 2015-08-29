@@ -2,7 +2,7 @@ var W3CWebSocket = require('websocket').w3cwebsocket;
 var config = require('../../config');
 var http = require('http');
 
-var client = new W3CWebSocket('ws://localhost:' + config.web.port + '/', ['eware-protocol', 'test1']);
+var client = new W3CWebSocket('ws://' + config.web.address + ':' + config.web.port + '/', [config.web.protocol, 'test1']);
 
 var options = {
 	host: 'api.openweathermap.org',
@@ -11,33 +11,33 @@ var options = {
 	method: 'GET'
 };
 
-client.onerror = function() {
+client.onerror = function () {
 	console.log('Connection Error');
 };
 
-client.onopen = function() {
+client.onopen = function () {
 	console.log('WebSocket Client Connected');
 
-	function sendNumber() {
+	function sendUpdates () {
 		if (client.readyState === client.OPEN) {
 			http.request(options, function(res) {
 				res.setEncoding('utf8');
 				res.on('data', function (chunk) {
 					var weatherData = JSON.parse(chunk);
 					client.send(JSON.stringify({ clientId: 'test1', data: weatherData.main}));
-					setTimeout(sendNumber, 10000);
+					setTimeout(sendUpdates, 10000);
 				});
 			}).end();
 		}
 	}
-	sendNumber();
+	sendUpdates();
 };
 
-client.onclose = function() {
+client.onclose = function () {
 	console.log('echo-protocol Client Closed');
 };
 
-client.onmessage = function(e) {
+client.onmessage = function (e) {
 	if (typeof e.data === 'string') {
 		console.log("Received: '" + e.data + "'");
 	}

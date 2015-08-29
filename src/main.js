@@ -1,11 +1,13 @@
 'use strict';
 
+// Main: The entry point of the service
+// ------------------------------------
+
 /**
- * @namespace app
  * @description The entry point of aware service. This function encapsulate the bootstrap logic. Executing this function
  * will start the service to interact with clients.
  */
-var app = function () {
+var main = function () {
 	/**
 	 * @property {object} webSocket the web socket module.
 	 */
@@ -27,7 +29,7 @@ var app = function () {
 	var process = require('./process');
 
 	/**
-	 * @property {object} finalhandler the final handler module
+	 * @property {object} finalHandler the final handler module
 	 */
 	var finalHandler = require('finalhandler');
 
@@ -37,7 +39,6 @@ var app = function () {
 	var serveStatic = require('serve-static');
 
 	/**
-	 * @function app.runStaticServer
 	 * @description Run the static server that will be used to establish a way for clients to download style documents.
 	 */
 	function runStaticServer () {
@@ -48,7 +49,6 @@ var app = function () {
 	};
 
 	/**
-	 * @function app.createServer
 	 * @description create the server that will be used by web sockets.
 	 * @return {object] instance of the created server
 	 */
@@ -66,7 +66,6 @@ var app = function () {
 	};
 
 	/**
-	 * @function app.runWebSocket
 	 * @description run the web socket
 	 * @param {object} the http server instance.
 	 */
@@ -86,6 +85,10 @@ var app = function () {
 			return true;
 		};
 
+		/**
+		 * Handles the socket messages.
+		 * @param {Object} message : message to process.
+		 */
 		function onSocketMessage (message) {
 			var parsedMsg = JSON.parse(message.utf8Data);
 
@@ -96,6 +99,9 @@ var app = function () {
 			}
 		};
 
+		/**
+		 * Handles socket close
+		 */
 		function onSocketClose () {
 			console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
 			process.unregister(clientID);
@@ -111,8 +117,7 @@ var app = function () {
 
 			var clientID = request.requestedProtocols[1];
 
-			// TODO: update echo-protocol
-			var connection = request.accept('eware-protocol', request.origin);
+			var connection = request.accept(config.web.protocol, request.origin);
 			console.log((new Date()) + ' Connection accepted.');
 
 			// TODO: request should contain a client ID.

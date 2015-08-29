@@ -1,11 +1,22 @@
+// Application Configuration
+// -----------------------
 var config = {};
 
-config.web = {};
-config.web.port = 9980;
-config.staticContent.port = 7000;
+// web: it contains config settings related to web interface. Like ports.
+config.web = {
+	address: 'localhost',
+	port: 9980,
+	protocol: 'aware',
+	staticContent: {
+		port: 7000
+	}
+};
 
-config.css = {};
-config.css.default = "http://localhost:7000/theme_default.css";
-config.css.high = "http://localhost:7000/theme_high.css";
+// css: the url of the css files that user can access.
+config.css = {
+	default: 'http://localhost:7000/theme_default.css',
+	high: 'http://localhost:7000/theme_high.css'
+};
 
+// Export config module
 module.exports = config;

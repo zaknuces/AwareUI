@@ -45,16 +45,18 @@ module.exports = function (grunt) {
 		execute: {
 			service: {
 				src: ['src/main.js']
+			},
+
+			nodeclient: {
+				src: ['node-clients/testClient1.js']
 			}
 		},
 
-		jsdoc: {
+		docco: {
 			dist: {
-				src: ['src/**/*.js', 'web-client/scripts/**/*.js'],
+				src: ['config.js', 'src/**/*.js', 'web-client/scripts/**/*.js', 'node-clients/*.js'],
 				options: {
-					destination: 'doc'//,
-					//template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
-					//configure : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json"
+					destination: 'docs'
 				}
 			}
 		}
@@ -63,12 +65,14 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-execute');
-	grunt.loadNpmTasks('grunt-jsdoc');
+	grunt.loadNpmTasks('grunt-docco');
 
 	// Run web-client
 	grunt.registerTask('serve', 'Compile then start a connect web server', ['connect:livereload', 'watch']);
 	// Run aware service
 	grunt.registerTask('service', 'Starts the aware service', ['execute:service']);
+	// Run node client
+	grunt.registerTask('node-client', 'Starts node client', ['execute:nodeclient']);
 	// Generate Doc
-	grunt.registerTask('generate-doc', 'Generate documentation', ['jsdoc']);
+	grunt.registerTask('gen-doc', 'Generate documentation', ['docco']);
 };

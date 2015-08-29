@@ -1,12 +1,23 @@
-/**
- * Created by zahido on 8/9/2015.
- */
+'use strict';
+
 var config = require('../config');
 
+// Process Module
+// -----------------------------
+
+/**
+ * @description The module responsible for processing client data and suggest styling and theme options.
+ */
 var process = (function () {
 
+	/**
+	 * @property {Object} clientMap the map to maintain status and profile of clients.
+	 */
 	var clientMap = {};
 
+	/**
+	 * @property {Object} DEFAULT_CONFIG the default suggestion
+	 */
 	var DEFAULT_CONFIG = {
 		css: config.css.default,
 		data: {
@@ -15,10 +26,25 @@ var process = (function () {
 	};
 
 	return {
+		/**
+		 * Register the client.
+		 * @param {String} clientId the unique id to identify a client.
+		 * @returns {Object} default suggestion (@link #DEFAULT_CONFIG}
+		 */
 		register: function (clientId) {
 			return clientMap[clientId] = DEFAULT_CONFIG;
 		},
 
+		/**
+		 * The main processing function to suggest options based on the surrounding data.
+		 *
+		 * @param {String} clientId the id of the client
+		 * @param {Object} surroundingData the object contains environment information.
+		 *
+		 * @returns {Object} suggestion
+		 *
+		 * TODO: this is a basic POC logic. Need to replace it with a better algorithm.
+		 */
 		evaluate: function (clientId, surroundingData) {
 			if (clientMap[clientId]) {
 				if (surroundingData.temp < 0 && clientMap[clientId].data.temperature !== 'frozen') {
@@ -57,16 +83,20 @@ var process = (function () {
 						}
 					}
 				}
-
 			}
 		},
 
+		/**
+		 * Un register client
+		 * @param {String} clientId the id of the client.
+		 */
 		unregister: function (clientId) {
 			clientMap[clientId] = null;
 		}
 	}
 }());
 
+// Export the module.
 module.exports = process;
 
 
