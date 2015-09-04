@@ -35,7 +35,16 @@ angular.module('ewareApp', [])
 				if (!mainCtrl.surroundingInfo || mainCtrl.surroundingInfo.data.temperature != e.data.temperature) {
 					mainCtrl.surroundingInfo = e;
 
-					// Update Css.
+					var temperatureMetaData = JSON.parse(e.data);
+
+					if (temperatureMetaData.css) {
+						var head = document.getElementsByTagName('head')[0],
+							link = document.createElement('link');
+						link.setAttribute('href', temperatureMetaData.css);
+						link.setAttribute('rel', 'stylesheet');
+						link.setAttribute('type', 'text/css');
+						head.appendChild(link);
+					}
 				}
 			};
 		};

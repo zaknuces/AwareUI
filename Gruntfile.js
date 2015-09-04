@@ -68,7 +68,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-docco');
 
 	// Run web-client
-	grunt.registerTask('serve', 'Compile then start a connect web server', ['connect:livereload', 'watch']);
+	grunt.registerTask('web-client', 'Compile then start a connect web server', ['connect:livereload', 'watch']);
 	// Run aware service
 	grunt.registerTask('service', 'Starts the aware service', ['execute:service']);
 	// Run node client

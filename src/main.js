@@ -42,10 +42,13 @@ var main = function () {
 	 * @description Run the static server that will be used to establish a way for clients to download style documents.
 	 */
 	function runStaticServer () {
+		var serve = serveStatic("themes/");
 		var staticServer = http.createServer(function(req, res) {
-			serveStatic("../")(req, res, finalHandler(req, res));
+			var done = finalHandler(req, res);
+			serve(req, res, done);
 		});
-		staticServer.listen(config.staticContent.port);
+		console.log('start static server ', config.web.staticContent.port);
+		staticServer.listen(config.web.staticContent.port);
 	};
 
 	/**
@@ -70,6 +73,9 @@ var main = function () {
 	 * @param {object} the http server instance.
 	 */
 	function runWebSocket (server) {
+		var connection = null;
+		var clientID = null;
+
 		var wsServer = new webSocket.server({
 			httpServer: server,
 			// You should not use autoAcceptConnections for production
@@ -105,7 +111,7 @@ var main = function () {
 		function onSocketClose () {
 			console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
 			process.unregister(clientID);
-		}
+		};
 
 		wsServer.on('request', function(request) {
 			if (!originIsAllowed(request.origin)) {
@@ -115,9 +121,9 @@ var main = function () {
 				return;
 			}
 
-			var clientID = request.requestedProtocols[1];
+			clientID = request.requestedProtocols[1];
 
-			var connection = request.accept(config.web.protocol, request.origin);
+			connection = request.accept(config.web.protocol, request.origin);
 			console.log((new Date()) + ' Connection accepted.');
 
 			// TODO: request should contain a client ID.
