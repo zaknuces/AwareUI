@@ -11,6 +11,14 @@ This project also contains various clients to allow the demonstration of working
   - Mobile
   - Web
   - NodeJS
+
+##Mobile
+Mobile app is under development. Follow these steps to run an application:
+  1: Install PhoneGap desktop application. http://docs.phonegap.com/getting-started/1-install-phonegap/desktop/
+  2: Install Mobile App. http://docs.phonegap.com/getting-started/2-install-mobile-app/
+  3: On PhoneGap desktop add AwareUI/mobile-client as existing project.
+  4: Start PhoneGap server.
+  5: Access Aware UI application from PhoneGap Mobile App.
   
 #RoadMap
 This is just the start, we are planning:
